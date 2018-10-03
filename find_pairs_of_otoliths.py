@@ -74,7 +74,8 @@ def find_pairs_of_otoliths( x_otolith_rescaled, x, y ):
     pairs = pairs.astype(dtype={'y': 'int64', 'filename_a': 'object', 'filename_b': 'object', 'image_vector_a': 'object', \
                'image_vector_b': 'object', 'idx_a': 'int64', 'idx_b': 'int64', 'y_pred_mean': 'object'})
     not_pairs = not_pairs.astype(dtype={'y': 'int64', 'filename': 'object', 'image_vector': 'object', 'idx': 'int64'})
-    
+
+
     assert not(set(not_pairs['idx']) < set(pairs['idx_a']))
     assert not(set(not_pairs['idx']) < set(pairs['idx_b']))
 

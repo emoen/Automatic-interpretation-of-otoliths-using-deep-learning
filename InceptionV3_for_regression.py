@@ -8,7 +8,7 @@ def InceptionV3_for_regression(the_input_shape=None, learning_rate=0.0004, decay
     inception = InceptionV3(include_top=False, weights='imagenet', input_shape=the_input_shape)
 
     z = inception.output
-    z = GlobalMaxPooling2D()(z)
+    z = GlobalAveragePooling2D()(z)
     #z = Dense(1024)(z)
     #z = Dropout(0.5)(z)
     #z = Activation('relu')(z)
@@ -20,7 +20,13 @@ def InceptionV3_for_regression(the_input_shape=None, learning_rate=0.0004, decay
     adam = optimizers.Adam(lr=learning_rate, decay= decay)
     otolitt.compile(loss='mean_squared_error', optimizer=adam, metrics=['accuracy', 'mse', 'mape'])
 
+    #add weight decay
+    #for layer in my_model.layers:
+    #    if hasattr(layer, 'kernel_regularizer'):
+    #        layer.kernel_regularizer= regularizers.l2(weight_decay)
+    #otolitt.load_weights('../tmp_oto2/log_300_steps_600_600_inception/4000_steps_300_epochs_split_rgb_inceptionV3_600_600_01.h5')
     for layer in otolitt.layers:
         layer.trainable = True
 
     return otolitt
+

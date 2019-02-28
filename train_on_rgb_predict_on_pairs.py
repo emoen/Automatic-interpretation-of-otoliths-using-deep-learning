@@ -281,7 +281,6 @@ def read_img_and_label():
 
 if __name__ == '__main__':
     train()
-    print("hi")
 
 
 

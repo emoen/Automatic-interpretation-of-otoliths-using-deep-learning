@@ -1,0 +1,459 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[top=0.85in,left=2.75in,footskip=0.75in]{geometry}
+
+% amsmath and amssymb packages, useful for mathematical formulas and symbols
+\usepackage{amsmath,amssymb}
+
+% Use adjustwidth environment to exceed column width (see example table in text)
+\usepackage{changepage}
+
+% Use Unicode characters when possible
+\usepackage[utf8x]{inputenc}
+
+% textcomp package and marvosym package for additional characters
+\usepackage{textcomp,marvosym}
+
+% cite package, to clean up citations in the main text. Do not remove.
+\usepackage{cite}
+
+% Use nameref to cite supporting information files (see Supporting Information section for more info)
+\usepackage{nameref,hyperref}
+
+% line numbers
+\usepackage[right]{lineno}
+
+% ligatures disabled
+\usepackage{microtype}
+\DisableLigatures[f]{encoding = *, family = * }
+
+% color can be used to apply background shading to table cells only
+\usepackage[table]{xcolor}
+
+% array package and thick rules for tables
+\usepackage{array}
+
+% create "+" rule type for thick vertical lines
+\newcolumntype{+}{!{\vrule width 2pt}}
+
+% create \thickcline for thick horizontal lines of variable length
+\newlength\savedwidth
+\newcommand\thickcline[1]{%
+  \noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+  \cline{#1}%
+  \noalign{\vskip\arrayrulewidth}%
+  \noalign{\global\arrayrulewidth\savedwidth}%
+}
+
+% \thickhline command for thick horizontal lines that span the table
+\newcommand\thickhline{\noalign{\global\savedwidth\arrayrulewidth\global\arrayrulewidth 2pt}%
+\hline
+\noalign{\global\arrayrulewidth\savedwidth}}
+
+\usepackage{float}
+
+% Remove comment for double spacing
+\usepackage{setspace} 
+\doublespacing
+
+% Text layout
+\raggedright
+\setlength{\parindent}{0.5cm}
+\textwidth 5.25in 
+\textheight 8.75in
+
+% Bold the 'Figure #' in the caption and separate it from the title/caption with a period
+% Captions will be left justified
+\usepackage[aboveskip=1pt,labelfont=bf,labelsep=period,justification=raggedright,singlelinecheck=off]{caption}
+\renewcommand{\figurename}{Fig}
+
+% Use the PLoS provided BiBTeX style
+% \bibliographystyle{plos2015}
+
+% Remove brackets from numbering in List of References
+\makeatletter
+\renewcommand{\@biblabel}[1]{\quad#1.}
+\makeatother
+
+% Header and Footer with logo
+\usepackage{lastpage,fancyhdr,graphicx}
+\usepackage{epstopdf}
+%\pagestyle{myheadings}
+\pagestyle{fancy}
+\fancyhf{}
+%\setlength{\headheight}{27.023pt}
+%\lhead{\includegraphics[width=2.0in]{PLOS-submission.eps}}
+\rfoot{\thepage/\pageref{LastPage}}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrule}{\hrule height 2pt \vspace{2mm}}
+\fancyheadoffset[L]{2.25in}
+\fancyfootoffset[L]{2.25in}
+\lfoot{\today}
+
+%% Include all macros below
+
+\newcommand{\lorem}{{\bf LOREM}}
+\newcommand{\ipsum}{{\bf IPSUM}}
+
+\usepackage[english]{babel}
+\usepackage{natbib}
+\usepackage{multirow}
+\usepackage{wrapfig}
+% \usepackage[nomarkers,figuresonly]{endfloat}
+\usepackage[caption=false]{subfig}
+
+% for editing
+\usepackage[normalem]{ulem}
+
+\begin{document}
+
+\vspace*{0.2in}
+
+% Title must be 250 characters or less.
+\begin{flushleft}
+{\Large
+\textbf\newline{Automatic interpretation of otoliths using deep learning} % Please use "sentence case" for title and headings (capitalize only the first word in a title (or heading), the first word in a subtitle (or subheading), and any proper nouns).
+}
+\newline
+% Insert author names, affiliations and corresponding author email (do not include titles, positions, or degrees).
+\\
+Endre Moen\textsuperscript{1*},
+Nils Olav Handegard\textsuperscript{1},
+Vaneeda Allken\textsuperscript{1},
+Ole Thomas Albert\textsuperscript{1},
+Alf Harbitz\textsuperscript{1},
+Ketil Malde\textsuperscript{1,2},
+\\
+\bigskip
+\textbf{1} Institute of Marine Research, Bergen, Norway
+\\
+\textbf{2} Department of Informatics, University of Bergen, Norway
+\\
+\bigskip
+
+% Use the asterisk to denote corresponding authorship and provide email address in note below.
+* endre.moen@hi.no
+
+\end{flushleft}
+% Please keep the abstract below 300 words
+
+\linenumbers
+
+\section*{Abstract}
+
+% PLoS ONE: 
+%    Describe the main objective(s) of the study
+%    Explain how the study was done, including any model organisms used, without methodological detail
+%    Summarize the most important results and their significance
+%    Not exceed 300 words
+
+% Point 1:  % Set the context for and purpose of the work;
+
+The age structure of a fish population has important implications for
+recruitment processes and population fluctuations, and is a key input to
+fisheries-assessment models. The current method of determining age structure relies on manually
+reading age from otoliths, and the process is labor intensive and
+dependent on specialist expertise. % Point 2: % Indicate the approach and methods;
+Recent advances in machine learning have provided methods that
+have been remarkably successful in a variety of settings, with
+potential to automate analysis that previously required manual
+curation. Machine learning models have previously been successfully
+applied to object recognition and similar image analysis tasks.  Here
+we investigate whether deep learning models can also be used for
+estimating the age of otoliths from images.% Point 3: % Outline the main results;
+ We adapt a pre-trained convolutional neural network designed for object
+recognition, to estimate the age of fish from otolith images. The
+model is trained and validated on a large collection of images 
+of Greenland halibut otoliths.  % Point 4: % Identify the conclusions and the wider implications.
+We show that the model works well, and that its precision is comparable to 
+documented precision obtained by human experts.   
+% * <proudy86@googlemail.com> 2018-11-07T14:59:51.325Z:
+% 
+% could add MSE values here?
+% 
+% ^.
+Automating this analysis may help to improve consistency, lower cost, and increase the extent of age estimation. Given that adequate data are available, this method could also be used to estimate age of other species using images of otoliths or fish scales.
+
+% Age reading is important, requires trained experts 
+
+% Recent work in image analysis has shown that deep learning can be applied to a wide range of recognition problems. Here we investigate state of the art convolutional neural networks, and apply them to analysis of images of otoliths of Greenland halibut (\emph{Reinhardtius hippoglossoides}) using regression as the objective function as opposed to more commonly as a classification problem. A real number estimate of an otolith is rounded to the nearest integer to give an estimate. Pairs of otoliths are split into images of a single otolith and an estimation is given by the mean of the two otoliths. The precision of the  prediction is then compared to precision human-level precision on similar data sets.
+
+% Keywords: otolith analysis, age determination, image analysis, machine learning, convolutional neural network
+
+\section*{Introduction}
+
+% Aging of fish in assessment models
+Age of fish is a key parameter in age-structured fisheries-assessment models. Age is usually considered as a discrete parameter (age group) that identifies the individual year class i.e. those originating from the spawning activity in a given year \citep{panfili2002manual}. An individual is categorized as age group 0 from the first early larval stage, and all age groups increase their age at 1 January. Assessment models typically express the dynamics of the individual year class from the age when they recruit, through sexual maturation, reproduction, and throughout their life cycle \citep{hilborn1992quantitative}. The models are fitted to data originating from commercial catches and fisheries-independent surveys. A sampling program for a specific fish stock typically involves sampling throughout the year using several different types of fishing gears. 
+
+% How age is read
+Fish age is typically estimated using samples of individual fish. Since fish growth and age-at-length varies in time and space \citep[e.g.][]{anes2015age}, 
+linked environmental variables such as temperature, food availability and morphology (e.g. fish length) cannot be reliably used as a proxy for age. Instead,  age is determined from a subset of individuals and usually used in conjunction with length data, and information relating to the time and location of sampling \citep{anes2015age}. The age is "read" from the annual zones in otoliths or fish scales. Although simple in principle, age reading depends on the correct identification of zonation patterns that may consist of both true annual zones, and zones representing other (unknown) temporal variation \citep{panfili2002manual,talman2003age}. The process is time consuming, requires a trained eye, and is uncertain. This uncertainty can be divided into accuracy and precision. 
+Whereas reader precision and between-reader bias can be assessed from age-readings, the bias of the age estimator is difficult to estimate but may be assessed using a number of methods (e.g. radiochemical analyses, analysis of chemical tags, or tag-recapture experiments \citep{campana2001accuracy}).
+
+% Earlier attempts to automate
+
+
+Methods to automatically read otoliths have been proposed, but to date none have proven satisfactory.
+Fablet and Le Josse \cite{fablet2005automated} investigated feature extraction from images of otoliths using statistical learning techniques, including both neural networks and support vector machines. They considered both biological features, including fish length, sex and catch date, and geometrical features, including shape and the opaque and translucent zonation patterns. Using both sets of features, they found that the models did not significantly improve predictions when compared to using just biological data. 
+Robertson and Alexander \cite{robertson2001development} found that precision of predicting age of otoliths using neural networks from geometric features could be improved by using biological features, but the results obtained from neural networks were less precise than those obtained from experienced readers. 
+
+\subsection*{Convolutional neural networks}
+
+Artificial neural networks are computational structures inspired by biological neural networks \citep{10.3389/fncom.2017.00114}. They consist of simple computational units referred to as \emph{neurons}, organized in layers. The neuron parameters (or weights) are estimated by training the model using supervised learning. This process consists of two steps: i.) forward propagation, where the network makes a prediction based on the input, and ii) back propagation, where the network learns from its mistake by calculating the gradient of a loss function, and then uses the gradient to update the neuron weights.
+
+% Machine learning
+In recent years, neural networks have become widely successful, especially in the field of image analysis. In 2016, the neural network designed by
+Krizhevsky et al.\ \cite{krizhevsky2012imagenet} was used to substantially improve the performance of an important benchmark task, object recognition, and the results were subsequently improved on by more refined network architectures \citep{he2016deep,lin2013network,simonyan2014very}, even to the point of rivaling human abilities.  One important improvement was an increase in the number of layers; this is often referred to as \emph{deep learning}.
+%Neural networks have been applied in tasks beyond object recognition, \textbf{examples...}.
+
+The most remarkable feature of deep learning neural networks is perhaps their generality.  With sufficient training data, they can be used to classify raw data (e.g. an array of pixels) directly i.e. no explicit design of low-level features is necessary. The network's lower layers learn to distinguish between primitive features automatically, typically identifying sharp edges or color transitions.  Subsequent layers then learn to recognize more abstract features as combinations of lower layer features, and finally merge this information to provide a high level classification. In a convolutional neural network (CNN), the layers are organized as a stack of convolutions, applying the same filters across the whole image.  An important advantage of this approach is that the number of parameters to be learned is reduced, which again reduces the amount of data and computation necessary for training.
+
+% Recently deep learning \citep{Goodfellow-et-al-2016} using CNN has achieved tremendous success in computer vision. It can model high-level abstractions in images related to a prediction task \citep{lecun89,lecun98,alexnet,inception}. A CNN does feature detection.  Each layer
+% does a non-linear transformation on the previous layer which is defined as a linear
+% transformation, $wx + b$ composed with a non-linear activation function, $\sigma$, resulting in the function  $\sigma ( wx + b)$, called a neuron. Several neurons exists in a layer and each neuron is connected to each
+% neuron in the next layer. Typically CNN have many layers. Convolutional filters are a way of sharing
+% parameters. Convolutional filters has the benefit over fully connected layer that
+% the use parameter sharing and therefore has sparsity of connections. Parameter sharing makes intuitively sense
+% as filters in the early layers are known to identify edges. If one type of edge is important to a network
+% it does not matter where that edge is in an image. Humans are known to have
+% the same type of cells in our retina (\citep{retinaEdge}) that detects edges. 
+% Filters in later layers are known to be more discriminative on objects \citep{grad-cam}.
+
+% Objectives this paper
+Here we explore whether a CNN can be used to reliably estimate the age of an otolith from an image. We implement a network architecture and train it on otolith images from Greenland halibut (\emph{Reinhardtius hippoglossoides}). We then evaluate the precision of our classifier by comparing it to existing age estimates from human experts.
+
+\section*{Methods and materials}
+
+\subsection*{Data collection and preprocessing}
+
+% Data collection
+The data set consists of pre-existing images of otoliths from the Institute of Marine Research (IMR, Bergen, Norway) image archive.  
+Fish otoliths were collected and photographed as part of the IMR data collection program for Greenland halibut on cruises between 2006 and 2017. The otolith-derived age data constitutes an important input to the stock assessment program, and represents a valuable source of historical information.
+The data set is comprised of 4109 images of otolith pairs and 657 images of single otoliths, totaling 8875 otoliths.
+As the present study only investigated historical pre-existing data, and did not involve the collection of new animals, ethics approval was not necessary.
+
+% Imaging
+The process of reading the otoliths from the images is described in Albert et al. \citep{albert2009towards}. The images have a resolution of 2596 x 1944 pixels. During preparation and transportation, the otoliths were sometimes damaged or lost, which resulted in only one of the two otoliths being present. The images also varied in distance to object, lighting, and background. Examples of image variation and damaged otoliths are shown in
+Fig \ref{fig:otoliths}.
+
+\begin{figure}[H]
+  \centering
+  % \includegraphics[width=8cm]{figures/Fig1.png}
+  %figure_1a = 2006_02135sep2_t01
+  %figure_1b = 2006_02135sep3_t03
+  %figure_1c = 2014_71073apr1_14t
+  \caption{\textbf{Example of otolith images.}  Otoliths can have loose fragments (A), vary in size (B), or be broken (C).}  % , 2006, 7 years),  B) from 2006, read as 1 year C) from 2014, read as 19 years}
+  \label{fig:otoliths}
+\end{figure}
+
+% Reading
+The age of each otolith pair had previously been estimated by one of two expert readers from the same lab (IMR facilities in Tromsø, Norway). The estimated age distribution for all 8875 images is shown in Fig  \ref{fig:age}.  
+Until recently, there was no standardized method for the age reading of Greenland halibut otoliths. But as a result of two International Council for the Exploration of the Sea workshops \citep{ices2011report,ices2017report}, two different methods were recommended, both of which resulted in reasonably accurate age estimates. The age estimates in this study were based on one of these methods, named the 'whole right otolith' method \citep{albert2009towards,albert2016growth,ices2017report}. In a flatfish like Greenland halibut, the growth patterns differ between the two otoliths. While the left otoliths show a centric growth pattern, the right otoliths are clearly acentric. The longest growth axis from the center to the edge is therefore found in the right otoliths. This longest growth axis consistently shows more patterns attributable to annuli than any other growth axes of the whole left or right otoliths \citep{albert2009towards,albert2016growth}. Since reader ID is not recorded for each otolith, there is potential for reader-specific bias in the data.
+
+\begin{figure}[H]
+  \centering
+  % \includegraphics[width=18cm]{figures/Fig2.eps}
+  \caption{\textbf{Age distribution of all 8875 images.}}
+  \label{fig:age}
+\end{figure}
+
+Prior to the analysis, the images of the paired otoliths were split, resulting in separate images of the left and right otoliths. Due to variation in the placement of the otoliths in the original images, the new split images were reviewed and the split adjusted manually. The horizontal position of the split varied by up to 350 pixels. In some cases, the otoliths overlapped horizontally, resulting in images containing a small fraction of the other otolith. This overlap was rarely more than 30 pixels. Finally, images of individual otoliths were rescaled to a standard size of 400 x 400 pixels. Although this caused images to be stretched or shrunk, CNNs have shown to be robust to random transformations \citep{bengio1994globally,boureau2010theoretical}. The process is illustrated in Fig \ref{fig:preprocess}. Information relating the paired otolith images to the separated right and left ototith images was retained in order to predict the age of the pairs, and evaluate the accuracy of predicting left and right otoliths.  
+
+\begin{figure}[H]
+\centering
+  % \includegraphics[width=8cm]{figures/Fig3.png}
+  %figure_3 = 2014_71087apr1_7t a/b
+\caption{\textbf{A pair of otoliths from 2014 with an estimated age of 13 years.} Due to the size difference between the otoliths, the image was split with a substantial offset from the middle (A).  There was also a small horizontal overlap causing a fragment of the right otolith to remain in the left image. Resizing causes stretching of the images (B), which is particularly evident in the image of the left otolith.}
+  \label{fig:preprocess}
+\end{figure}
+
+\subsection*{Convolutional neural network architecture}
+
+We used a classifier model based on the Inception v3 \citep{2015arXiv151200567S} model. This is a state of the art 48-layer architecture for image classification, and the successor to the network \citep{szegedy2015going} that won the 2014 ImageNet competition \citep{deng2009imagenet}.  There are several competing architectures, and variations of ResNet \citep{he2016deep} (ResNet50, ResNet101, and ResNet152), Inception v4 \citep{szegedy2017inception}, and DenseNet121 \citep{huang2017densely} were considered, but preliminary testing showed small differences in results, with the preliminary performance of most configurations varying less than 10\%.
+
+Inception v3 classifies images with a size of 299 x 299 pixels into one of 1000 categories. To use this model to analyze the otolith images, some modifications to the network were necessary. First, the input layer was scaled to match the image size of 400 x 400 pixels. Since age estimation is a regression problem, the output layer was changed from a 1000-dimension output vector, representing class probabilities, to a single numeric output. Finally, the objective (or loss) function, used in optimization, was changed from cross entropy to mean squared error (MSE) defined as
+
+\begin{equation}
+\label{eq:MSE}
+MSE=\frac{1}{n}\sum_{t=1}^{n} (\hat{y_t} - y_t)^2 \end{equation}
+where $\hat{y_t}$ is the CNN prediction and $y_t$ is the read age, and $n$ is the number of predictions.
+
+The CNN layers were loaded with pre-trained (using ImageNet data) and publicly available weights, as opposed to using random initialization, which is inefficient \citep{NIPS2014_5347}. All layers were set to trainable i.e. the values of the individual neuron weights were updated during training.
+
+\subsection*{Training the convolutional neural network}
+
+The CNN was implemented using the standard software packages Keras \citep{keras} with TensorFlow \citep{abadi2016tensorflow}, and computation was performed using CUDA version 9.1 and CuDNN with nVidia (nVidia Corp., Santa Clara, California) P100 accelerator cards.
+
+The data set was split into training, validation and testing sets, containing 92\%, 4\% and 4\% of the images, respectively. The validation set was used to control (and terminate) the training process, while final accuracy was estimated using the test set. All single images were placed in the training set, so that the testing and validation sets only contained paired images.
+
+Augmentation is an important technique for training deep CNNs on limited data sets \citep{krizhevsky2012imagenet}. This process applies a set of random transformations that preserve class, whilst artificially inflating the training data set size. Therefore, the classifier is unlikely to encounter the exact same input twice, and is less likely to overfit the data i.e. learning to recognize individual input images, rather than identifying general features.
+We applied standard image augmentation to our data set using Keras and TensorFlow. The images were rotated randomly between 0 and 360 degrees, reflected by the vertical or horizontal axis, and vertically shifted by +/- 10 pixels.
+In addition, standard image normalization for CNNs was applied, mapping the 0-255 pixel values for each image to values between 0 and 1.
+
+\begin{table}[hbt!]
+  \centering
+  \caption{\textbf{Hyperparameter configurations explored.}}
+  \begin{tabular}{ l|l }
+    Hyperparameter & Values explored \\
+    \hline
+    Batch size    &  8, 12, 16, 20 \\
+    Learning rate &  0.1, 0.01, 0.0004, 0.0001 \\
+    Optimizer     &  SGD, rmsprop, Adam \\
+    Weight decay  &  0.01, 0.001, 0 \\
+  \end{tabular}
+  \label{tab:hyper}
+\end{table}
+
+The configuration of the training process is determined by a set of hyperparameters.
+Batch size defines the number of images to be processed at a time during training, and the gradient of the error function for the current parameter is calculated for each batch.
+The optimizer function determines how the weights are modified from the gradient.  Here, we used stochastic gradient descent (SGD), rmsprop, and Adam \citep{kingma2014adam}.
+Weight decay is a regularization method that causes the weights to gravitate towards smaller values, limiting the nonlinear behavior of the classifier.
+
+GridSearchCv from ScikitLearn \citep{scipy} and KerasRegressor from Keras were used to perform a grid search of the hyperparameter values shown in Table \ref{tab:hyper}.
+The optimal values of the hyperparameters were found using the Adam optimizer function \citep{kingma2014adam}, a batch size of 20, learning rate of 0.0004, and a decay value of 0.
+In addition, the patience, which controls termination of training, was set to 20, the epoch was set to 150, and steps was set to 1600. In total, a complete training run can process 4.8 million images.
+
+\subsection*{Comparing accuracy to human experts}
+
+To compare the performance of the CNN model with that of human experts, we used the same method that is used when evaluating human versus human precision \citep{campana1995graphical}. 
+Since the actual age of the fish is unknown, the accuracy cannot be assessed and so the coefficient of variation (CV) of the (assumed) independent estimators is used. For a given otolith $j$, estimator $i$ provides an age estimate $X_{ij}$ for otolith $j$, and the CV for that individual otolith $j$ is given as 
+\begin{equation}
+\label{eq:CVj}
+CV_j = \dfrac{\sqrt[]{\sum_{i=1}^{R} \dfrac{(X_{ij} - X_j)^2 }{R-1} } }  {X_j}, 
+\end{equation}
+where $R$ is the number of individual estimators and $X_j=\frac{1}{R}\sum_{i=1}^{R} X_{ij}$. To assess the overall performance across the otoliths for the full data set, the mean CV is used and defined as
+\begin{equation}
+\label{eq:CV}
+\overline{CV} = \dfrac{1}{J} {\sum_{j=1}^{J}  CV_j},
+\end{equation}
+where $J$ is the number of otoliths. 
+
+To evaluate the CNN model, we estimated the CV using the CNN as one estimator ($i=1$), and the human-read age as the other ($i=2$), resulting in two individual estimators and hence, an R value of 2.
+
+Since the CNN is reading both images, we used two different definitions of the CNN to read otoliths, i.e. two different definitions of the age estimate, $X_{1j}$ (c.f. Eq.\eqref{eq:CVj}). The first definition, was derived from an average taken over an image pair, and is given by
+\begin{equation}
+X_{1j} =  \dfrac{ X^{[R]}_{1j} + X^{[L]}_{1j} }{2} \label{eq:X_1ja}
+\end{equation}
+whereas the second definition only considers the right otolith, i.e.
+$%\begin{equation*}
+X_{1j} =  X^{[R]}_{1j},
+$%\end{equation*}
+ where $X^{[L]}_{1j}$ and $X^{[R]}_{1j}$ are the CNN-predicted age of the left and right otolith respectively. The first definition is based on our approach and the latter is based on what an expert reader would do \citep{albert2009towards} for this specific data set, and both were tested.
+
+To evaluate the merit of CNN versus pure reader-based CVs, the latter was taken from the literature \citep{albert2009towards,albert2016growth}. A drawback of this approach is that any between-reader bias may affect the reader-based CV by an unknown amount. 
+
+\section*{Results}
+
+Predictions were made on the test set for the different configurations and the MSEs of single otolith predictions of age were recorded. The MSE and CV of pair-wise predictions were also recorded. Calculated CV values were then used to select the optimum CNN model. 
+% * <proudy86@googlemail.com> 2018-11-07T18:07:21.907Z:
+% 
+% There is a lot of detail in the method and not much in the results, as a reader i would like to see a more detailed summary of the method here.
+% 
+% ^.
+
+\begin{table}[hbt!]
+  \centering
+\caption{\textbf{MSE (Eq.~\ref{eq:MSE}) and mean CV (Eq.~\ref{eq:CV}) for predictions.} The statistics are calculated on on single, left, right and paired (both left and right) otolith images.}  
+\begin{tabular}{lllll}
+Metric  & Single & Left & Right & Paired  \\ \hline
+MSE & 2.99 & 3.27 & 2.71 & 2.65 \\ 
+mean CV & 9.47 & 9.97 & 8.97 & 8.89 \\ 
+\end{tabular}
+\label{tab:cv}
+\end{table}
+
+%Table \ref{tab:cv}, row 1, shows the mean square error
+% (MSE) of the classifier (Eq. \ref{eq:MSE}).  
+The MSE values of the predictions made for the left and right otoliths and both otoliths combined were 3.27, 2.71 and 2.99 respectively (Table~\ref{tab:cv}). Using the average of the predictions for each of the paired otoliths resulted in the lowest MSE value (2.65).
+
+\begin{figure}[H]
+	\centering
+    % \includegraphics[width=8cm]{figures/Fig4.png}
+    \caption{\textbf{Age predictions}. Predictions are shown using single otoliths (A) and using the average prediction of each pair (B), compared to the age estimated by a human reader.}
+    \label{fig:single_pairs}
+\end{figure}
+
+Fig \ref{fig:single_pairs} shows that using both otoliths in an ensemble reduces prediction variance. There was also a clear tendency for the system to predict a lower age for older individuals, when compared to human readers. The variance of the predictions also increased with the age of the otolith.
+
+% maybe cut these figures?
+\begin{figure}[H]
+	\centering
+    % \includegraphics[width=8cm]{figures/Fig5.png}
+    \caption{\textbf{Age predictions}. Predictions are shown for the right (A) and left (B) otoliths compared to the age as estimated by a human reader.}
+    \label{fig:left_and_right_vs_human}
+\end{figure}  
+
+%\subsection*{Comparing to human performance}
+For Greenland halibut, the mean CV between human experts has previously been reported as 12\% and 16.3\% \citep{albert2009towards,albert2016growth}. Using otolith pairs, we achieved a mean CV of 8.89\%. Fig \ref{fig:left_and_right_vs_human} shows predictions for left and right otoliths separately. Age was correctly estimated for 48 out of the 164 tested otolith-pairs (29 \%). In  addition, 63 cases (38\%) were estimated to be one year off the read age.
+
+% \section*{Discussion items}
+% {\bf Are these now dealt with properly?}
+% \begin{itemize}
+% \item Does the precision in age-reading vary across different age-groups? I.e. Is there more agreement between human readers for "younger" otoliths?
+% \item MSE is better for ensembles (pairs), CV is worse.  Why?
+% \item Features - are we using rings or shape or what?
+% \end{itemize}
+
+\section*{Discussion}
+
+% Right and left predictions - necessary?
+%      % \includegraphics[scale=0.3]{figures/figure_15.png}
+%      % \includegraphics[scale=0.3]{figures/figure_16.png}
+
+The objective of this study was to investigate to what extent a deep CNN could be adapted to predict age from otolith images. Using a data set of Greenland halibut otoliths, we trained and validated an Inception-3 network and showed that it performed at a level close to human accuracy. Deep neural networks have been shown to outperform more conventional methods across a range of problems \citep[e.g.][]{krizhevsky2012imagenet}, and given their generality, we hypothesized that they would perform well on this rather difficult task. Several different network architectures were used, and most configurations were able to perform well, which further supports our hypothesis.
+
+% I think this is now covered in Methods
+%\subsection*{Model selection and advantages of the CNN approach}
+% Neural networks and CNN's have the advantage that they learn the lower level features and that they are often not restricted by low levels of abstraction. Variants of Inception, ResNet and DenseNet are available pretrained on IMLVS data through the Keras framework, and to test the sensitivity to the different models, we trained these as well a simpler baseline model consisting of five convolutional layers and two dense layers.  Except for the baseline model, they all produced similar results. The lack of sensitivity to the model selection confirms that the models are general and that they are able to find similar patterns in the data. 
+% {\bf This is repetition from subsection Conv net architecture, maybe?}
+%{\bf Endre - what was the MSE range from different networks and hyperparameters?}
+% {\bf EM: range of most MSE for resnet, densenet, inception: 2.8-3.2, but also one network with MSE as high as 4.8. Variation in several hyper-parameters, different augmentation transformations, and image size. }
+
+%\subsection*{consequences of preprocessing the data}
+A simplistic approach was taken when preprocessing the images. Potentially informative properties, such as size, proportion and orientation, were lost through rescaling and augmentation, but this did not notably affect the network's ability to predict age. The classifier functioned robustly across varying backgrounds. Traditionally, preprocessing algorithms have also been used to enhance features for the classifier. We also experimented with various preprocessing techniques. For example, we ran the images through a hill shading algorithm before training, but it did not improve results. This supports the conventional wisdom that deep neural networks are able to identify informative features directly, and that developing specialized preprocessing techniques is likely to be unnecessary.
+
+We found a much stronger correlation between the otolith pixel area and CNN predicted age in the test set, than the correlation between pixel area and the human-read age. This indicates that size is a major feature associated with age in the CNN, despite the fact that the images of single otoliths, produced by splitting paired otolith images, varied in size and were rescaled by different proportions. Therefore, a future task of this work is to apply randomized scaling as an augmentation feature, to determine how sensitive the results are with regard to otolith size.
+
+While we have not performed an extensive analysis of cases where the network failed to correctly predict age, a cursory inspection revealed that image inconsistencies (some examples are shown in Fig \ref{fig:mispredicted}) could impact the results. This suggests that if the process of taking the images could be standardized, e.g. using consistent equipment, range, lighting conditions etc., then results could be improved.
+
+\begin{figure}[H]
+  \centering
+  %  \includegraphics[width=8cm]{figures/Fig6.png}
+  \caption{\textbf{Examples of images where the network failed to correctly predict age.}  A) Dark images of otoliths with deep lobes are read as 12 years, and predicted as 15.7 (left), and 15.6 (right). B) Lighter otoliths below are read as 21 years, and predicted as 15.6 (left and right).} \label{fig:mispredicted} 
+%above = 2013_0854jun1_13t a/b, mse = 29.5 and 28.1
+%below = 2008_02017sep1_t14 a/b, mse = 29.2 and 28.2
+\end{figure}
+    
+%\subsection*{Non-Balanced data set}
+The cost function applied was not adjusted for an imbalanced data set i.e. a prediction bias for the more abundant year classes would of been penalized more than classes with relatively lower abundances. This could explain the lower prediction accuracy for older otoliths, as there were relatively fewer otoliths from older fish. One way to mitigate this is by implementing a cost function that weights classes evenly i.e. each year class inflicts the same cost \citep{shen2015deepcontour}. However, for ages that are critical to assessment, incorrect predictions should be associated with higher penalties. 
+
+Since the model is a supervised machine learning algorithm, the learning
+can only be as good as the underlying precision and accuracy. Since the 
+accuracy is unknown \citep{albert2009towards}, we treated the CNN as an individual reader and computed the same mean CV as is used in human versus human comparisons. 
+We achieved a mean CV of 8.89 \%, which is considerably lower than the reported mean CV of human readings, ranging from 12 to 16.3\% \citep{albert2009towards,albert2016growth}. 
+However, a between-reader bias could have increased the reported CVs. In our case, each otolith in the test set was only read by one of two readers from the same lab. Therefore, it is reasonable to assume that in this case the bias is likely to be negligible. The large variation in reported CVs also indicates that this is a sensitive measure, and that not too much importance should be attached to our relatively low CV.
+
+
+A common criticism of CNNs is that the exact features used in the process are unknown. During the training and testing of the CNN, we set aside 4\% of the data set for validation (during training), and 4\% for testing (after training), meaning that 8\% of the data was not used to train the network. However, when the method is in production, it is important to keep validating the method by continuing to collect training data. This is particularly important if the method is used as part of a monitoring time-series.
+
+Using CNNs to make age predictions can be more efficient than expert-read predictions. If cost savings are the key motivation for implementing automated aging of otoliths, a common objection is that any cost savings relies on the assumption that the actual reading is the factor that drives the cost. In reality, the time required for otolith preparation, i.e. removing the otoliths and preparing the sample for imaging, may take more time than the actual reading, and so the savings would be marginal. However, skilled readers require years of training, which should be considered when determining cost. Assuming that the current staff is maintained and used to generate validation data, the sampling program could be scaled up without the necessity to train more readers. Furthermore, if the network is indeed able to learn characteristics of individual readers, it is possible to explore downstream effects of using different readers, as well as interpreting otoliths using an ensemble that emulates multiple readers for increased accuracy.
+
+% !!!!!!
+In their recent rewiew, Fisher and Hunter \cite{fisher2018digital}
+found that digital image analysis systems provided little improvement in
+cost-effectiveness over manual otolith analysis.  Although machine
+learning systems were included in their study, no modern deep learning
+convolutional network was considered.  In light of the accuracy we
+have demonstrated from such a system, this conclusion may need to be
+revised.
+
+Future work should include testing the method on other species and new features. The method could also be adapted to specific use cases or enhanced by other predictors. Organizing data and collecting images and age labels for a wider range of species is required to move forward. It is likely that the patterns used to age Greenland halibut are similar to the general patterns for other species, which makes the classifier ideal for using transfer learning. Furthermore, a general CNN could be trained using otolith images from multiple species, and then fine-tuned to each specific species. Other features like age-at-maturation (spawning zones) could also be read from otoliths, and where training data are available, the network could be adjusted to predict these features as well.
+
+\subsection*{Conclusion}
+
+Age determination from otoliths is an important input for management of marine fish stocks. Here, we predicted age of Greenland halibut by training a CNN using otolith images. The results indicate that automating the data processing for this intrinsically complicated process is possible. On top of its ability to learn aging, the method offers improved efficiency, the possibility to learn how to read otoliths across species, and, given proper attention to the collection of validation data, increased consistency over time. Since age is an essential component of any age-based model, the method will have an impact on the management of fish resources and our understanding of ecosystem dynamics.
+
+\bibliographystyle{plain} % {plos2015} % 
+\bibliography{references}
+
+\end{document}
+
